@@ -41,7 +41,7 @@ export default function Signup({ navigation }) {
             setdisplay("");
             setEmail("");
             setPass("");
-            navigation.navigate("Login");
+            navigation.navigate("Chat");
 
           })
           .catch(error => alert(error.message));

@@ -123,7 +123,7 @@ const Chat = props => {
           </TouchableOpacity>
         </View>
 
-        <View style={styles.col, {marginTop : 20}}>
+        <View style={{marginTop : 20}, styles.col}>
           <Text style={styles.header2}>Other's chat</Text>
           <TouchableOpacity
             onPress={() => props.navigation.navigate("CreateChat")}

@@ -100,58 +100,56 @@ const ChatStackNavigator = () => {
   }))
   return (
     <Stack.Navigator>
-      {!isUser && <Stack.Screen
+      <Stack.Screen
         name="GetStarted"
         component={GetStarted}
         options={{ headerShown: false }}
-      />}
-
-      {!isUser && <Stack.Screen name="Login" component={Login} />}
-
-      {!isUser && <Stack.Screen
+      />
+      <Stack.Screen
         name="ChoosingUsername"
         component={ChoosingUsername}
         options={{ headerShown: false }}
-      />}
-      {!isUser && <Stack.Screen
+      />
+      <Stack.Screen
         name="VerifyPhoneNumber"
         component={VerifyPhoneNumber}
         options={{ headerShown: false }}
-      />}
-      {!isUser && <Stack.Screen
+      />
+      <Stack.Screen
         name="PhoneNumber"
         component={PhoneNumber}
         options={{ headerShown: false }}
-      />}
-      {!isUser && <Stack.Screen
+      />
+      <Stack.Screen
         name="LinkPortfolio"
         component={LinkPortfolio}
         options={{ headerShown: false }}
-      />}
-      {!isUser && <Stack.Screen
+      />
+      <Stack.Screen
         name="InviteFriends"
         component={InviteFriends}
         options={{ headerShown: false }}
-      />}
-      {!isUser && <Stack.Screen
+      />
+      <Stack.Screen
         name="Notification"
         component={Notification}
         options={{ headerShown: false }}
-      />}
-      {!isUser && <Stack.Screen
+      />
+      <Stack.Screen
         name="Success"
         component={Success}
         options={{ headerShown: false }}
-      />}
-      {!isUser && <Stack.Screen name="SignUp" component={SignUp} />}
-      {isUser && <Stack.Screen name="Chat" component={BottomTabNavigator} options={{headerShown : false}}/>}
-      {isUser && <Stack.Screen name="CreateChat" component={CreateMsg} />}
-      {isUser && <Stack.Screen name="ChatRoom" component={ChatRoom} />}
-      {isUser && <Stack.Screen name="Discussion" component={Discussion} />}
-      {isUser && <Stack.Screen name="AddGroup" component={AddGroup} />}
-      {isUser && <Stack.Screen name="StockChat" component={StockChat} />}
-      {isUser && <Stack.Screen name="StockProfile" component={StockProfile} />}
-      {isUser && <Stack.Screen name="Profile" component={Profile} />}
+      />
+      <Stack.Screen name="SignUp" component={SignUp} />
+      <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="Chat" component={BottomTabNavigator} options={{ headerShown: false }} />
+      <Stack.Screen name="CreateChat" component={CreateMsg} />
+      <Stack.Screen name="ChatRoom" component={ChatRoom} />
+      <Stack.Screen name="Discussion" component={Discussion} />
+      <Stack.Screen name="AddGroup" component={AddGroup} />
+      <Stack.Screen name="StockChat" component={StockChat} />
+      <Stack.Screen name="StockProfile" component={StockProfile} />
+      <Stack.Screen name="Profile" component={Profile} />
     </Stack.Navigator>
   );
 };
