@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   Image,
@@ -20,7 +20,12 @@ const DismissKeyboard = ({ children }) => (
   </TouchableWithoutFeedback>
 );
 
-export default function App({ ...props }) {
+export default function App({ route, navigation }) {
+
+  const [phoneNo, setPhoneNo] = useState([])
+
+  const { username } = route.params;
+  console.log("RRRRRRRRRRRROUUUUUUUTE ==>", username)
   return (
     <View style={styles.getStarted}>
       <TouchableOpacity
@@ -53,6 +58,7 @@ export default function App({ ...props }) {
             style={styles.Input}
             placeholder="Phone Number"
             placeholderTextColor="lightgrey"
+            onChangeText={val => setPhoneNo(val)}
           />
         </View>
 
@@ -66,7 +72,7 @@ export default function App({ ...props }) {
         >
           <TouchableOpacity
             style={styles.Button}
-            onPress={() => props.navigation.push("VerifyPhoneNumber")}
+            onPress={() => navigation.navigate("VerifyPhoneNumber", { username: username, phoneNo: phoneNo })}
           >
             <Text
               style={{
@@ -80,7 +86,7 @@ export default function App({ ...props }) {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => props.navigation.push("LinkPortfolio")}
+            onPress={() => navigation.navigate("LinkPortfolio", { username: username, phoneNo: "" })}
           >
             <Text style={styles.username}>Skip</Text>
           </TouchableOpacity>

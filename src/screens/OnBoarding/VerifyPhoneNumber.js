@@ -20,7 +20,9 @@ const DismissKeyboard = ({ children }) => (
   </TouchableWithoutFeedback>
 );
 
-export default function App({ ...props }) {
+export default function App({ route, navigation }) {
+
+  const {username, phoneNo} = route.params;
   return (
     <View style={styles.getStarted}>
       <TouchableOpacity
@@ -65,7 +67,7 @@ export default function App({ ...props }) {
         >
           <TouchableOpacity
             style={styles.Button}
-            onPress={() => props.navigation.push("SignUp")}
+            onPress={() => navigation.navigate("SignUp")}
           >
             <Text
               style={{

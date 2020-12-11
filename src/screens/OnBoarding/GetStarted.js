@@ -44,7 +44,7 @@ export default function App({ ...props }) {
       <View>
         <TouchableOpacity
           style={styles.getstartedButton}
-          onPress={() => props.navigation.push("SignUp")}
+          onPress={() => props.navigation.push("ChoosingUsername")}
         >
           <Text
             style={{

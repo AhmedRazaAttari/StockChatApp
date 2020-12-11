@@ -14,15 +14,16 @@ import fire, { firestore } from "../database/firebase";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-export default function Signup({ navigation }) {
-  const [displayName, setdisplay] = useState();
+export default function Signup({ route, navigation }) {
+  // const [displayName, setdisplay] = useState();
   const [email, setEmail] = useState();
   const [password, setPass] = useState();
   const [isLoading, setLoading] = useState(false);
+  const {username, phoneNo} = route.params;
 
   const registerUser = () => {
     console.log(email)
-    if (displayName !== "" && displayName !== undefined && email !== "" && email !== undefined && password !== "" && password !== undefined) {
+    if (email !== "" && email !== undefined && password !== "" && password !== undefined) {
       setLoading(true);
       fire
         .auth()
@@ -30,15 +31,16 @@ export default function Signup({ navigation }) {
         .then(res => {
           firestore.collection("users").doc(res.user.uid).set({
             id: res.user.uid,
-            Name: displayName,
+            Name: username,
             email: email,
+            phoneNo : phoneNo
           }).then(() => {
             res.user.updateProfile({
-              displayName: displayName,
+              displayName: username,
             })
             alert("User registered succesfully")
             setLoading(false);
-            setdisplay("");
+            // setdisplay("");
             setEmail("");
             setPass("");
             navigation.navigate("Chat");
@@ -70,12 +72,12 @@ export default function Signup({ navigation }) {
 
         <View style={{ width: "100%", alignItems: "center", padding: 5 }}>
 
-          <TextInput
+          {/* <TextInput
             style={styles.inputStyle}
             placeholder="Name"
             value={displayName}
             onChangeText={val => setdisplay(val)}
-          />
+          /> */}
           <TextInput
             style={styles.inputStyle}
             placeholder="Email"

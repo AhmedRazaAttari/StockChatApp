@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   Image,
@@ -8,10 +8,12 @@ import {
   TouchableOpacity,
   Dimensions,
   KeyboardAvoidingView,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
+  Alert
 } from "react-native";
 import { Input } from "react-native-elements";
 import { AntDesign } from "@expo/vector-icons";
+import fire, { firestore } from "../../database/firebase";
 
 const DismissKeyboard = ({ children }) => (
   <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -20,12 +22,56 @@ const DismissKeyboard = ({ children }) => (
   </TouchableWithoutFeedback>
 );
 
-export default function App({ ...props }) {
+export default function App({ route, navigation }) {
+  const [usersName, setUsersName] = useState([])
+  const [username, setusername] = useState();
+
+
+  useEffect(() => {
+    fetchNames()
+  }, []);
+
+  function fetchNames() {
+    firestore.collection("users").get().then(function (snapshot) {
+      var names = []
+      snapshot.forEach(anotherSnapshot => {
+        console.log("anotherSnapshot.data()", anotherSnapshot.data().Name)
+        for (var i = 0; i < anotherSnapshot.data.length; i++) {
+          names.push(anotherSnapshot.data().Name)
+        }
+        setUsersName(names)
+
+      })
+    })
+  }
+
+  function checkUserName() {
+    console.log("usersName *****", usersName)
+    if (username !== undefined && username !== "") {
+      if (usersName.indexOf(username) > -1) {
+        Alert.alert("this username is not available.. Please try another one.")
+      }
+      else {
+        navigation.navigate("PhoneNumber", { username: username })
+      }
+      // var arraycontainname = usersName.indexOf(username) > -1;
+
+      // if(arraycontainname){
+      // navigation.navigate("PhoneNumber", {username : username})
+      // }
+      // else{
+      // Alert.alert("this username is not available.. Please try another one.")
+      // }
+    }
+    else {
+    }
+  }
+
   return (
     <View style={styles.getStarted}>
       <TouchableOpacity
         style={{ position: "absolute", top: 50, left: 20 }}
-        onPress={() => props.navigation.goBack()}
+        onPress={() => navigation.goBack()}
       >
         <AntDesign style={styles.back} name="left" size={30} color="black" />
       </TouchableOpacity>
@@ -52,15 +98,9 @@ export default function App({ ...props }) {
             style={styles.Input}
             placeholder="Username"
             placeholderTextColor="lightgrey"
+            onChangeText={val => setusername(val)}
           />
-          {/* <TextInput
-              style={styles.inputStyle}
-              placeholder="Enter Group Name"
-              value={groupName}
-              // onValidateTextField = {validateField}
 
-              onChangeText={val => setGroupName(val)}
-            /> */}
         </View>
 
         <View
@@ -71,21 +111,9 @@ export default function App({ ...props }) {
             alignItems: "center"
           }}
         >
-          {/* <TouchableOpacity
-              onPress={performCreateGroup}
-              isLoading={isLoading}
-            >
-              <View style={styles.btn}>
-                <Text
-                  style={{ color: "white", fontSize: 19, fontWeight: "bold" }}
-                >
-                  Create Group
-                </Text>
-              </View>
-            </TouchableOpacity> */}
           <TouchableOpacity
             style={styles.Button}
-            onPress={() => props.navigation.push("PhoneNumber")}
+            onPress={() => checkUserName()}
           >
             <Text
               style={{

@@ -14,7 +14,7 @@ import {
 
 import { Feather } from "@expo/vector-icons";
 
-const StockGroupCard = ({ ticker, pctchange, uri, count, onPress, image }) => {
+const StockGroupCard = ({ ticker, pctchange, uri, count, onPress, image, msg }) => {
   return (
     <TouchableOpacity style={styles.card} onPress={onPress}>
       <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -74,7 +74,7 @@ const StockGroupCard = ({ ticker, pctchange, uri, count, onPress, image }) => {
             </View>
 
             <View style={{ flexDirection: "row" }}>
-              <Text style={{ paddingLeft: 20 }}>This stock is trending</Text>
+              <Text style={{ paddingLeft: 20 }}>{msg}</Text>
             </View>
           </View>
         </View>

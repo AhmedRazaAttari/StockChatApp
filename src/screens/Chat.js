@@ -24,16 +24,19 @@ import StockGroupCard from "../components/StockGroupCard";
 
 const Chat = props => {
   const [groups, setGroups] = useState([]);
+  const [Chatheads, setChatheads] = useState([]);
 
   useEffect(() => {
     getChats();
   }, []);
 
   function getChats() {
+    var UserId = fire.auth().currentUser.uid;
     const db = firestore;
     var groupArray = [];
-    db.collection("groups").onSnapshot(function(snapshot) {
-      snapshot.docChanges().forEach(function(change) {
+    var ChatHeadsArr = [];
+    db.collection("groups").onSnapshot(function (snapshot) {
+      snapshot.docChanges().forEach(function (change) {
         if (change.type == "added") {
           console.log("New Group: ", change.doc.data());
           groupArray.push(change.doc.data());
@@ -48,6 +51,23 @@ const Chat = props => {
         setGroups(groupArray);
       });
     });
+
+    var DBref = db.collection("users").doc(UserId);
+    DBref.collection("ChatHeads").get().then(function (snapshot) {
+
+      snapshot.forEach((anotherSnapshot) => {
+        console.log("SNAPSHOT OF USER Chata ==>", anotherSnapshot.data())
+        // ChatHeadsArr.push(anotherSnapshot.data())
+        for (var i = 0; i < snapshot.data.length; i++) {
+          ChatHeadsArr.push({
+            name: anotherSnapshot.data().name,
+            uid: anotherSnapshot.data().uid,
+          })
+        }
+        setChatheads(ChatHeadsArr)
+      })
+
+    })
   }
   return (
     // <LinearGradient colors={["#AAB8C2", "#FFF"]} style={styles.gradient}>
@@ -87,6 +107,8 @@ const Chat = props => {
                 itemPic: "https://i.stack.imgur.com/l60Hf.png"
               });
             }}
+            msg="This stock is trending"
+
           ></StockGroupCard>
           <StockGroupCard
             ticker="$SQ"
@@ -99,6 +121,8 @@ const Chat = props => {
                 itemName: "$SQ"
               });
             }}
+            msg="This stock is trending"
+
           ></StockGroupCard>
           <StockGroupCard
             ticker="$NET"
@@ -111,6 +135,7 @@ const Chat = props => {
                 itemPic: "https://i.stack.imgur.com/l60Hf.png"
               });
             }}
+            msg="This stock is trending"
           ></StockGroupCard>
         </View>
 
@@ -123,7 +148,7 @@ const Chat = props => {
           </TouchableOpacity>
         </View>
 
-        <View style={{marginTop : 20}, styles.col}>
+        <View style={{ marginTop: 20 }, styles.col}>
           <Text style={styles.header2}>Other's chat</Text>
           <TouchableOpacity
             onPress={() => props.navigation.navigate("CreateChat")}
@@ -131,10 +156,38 @@ const Chat = props => {
             <AntDesign name="pluscircleo" size={24} color="black" />
           </TouchableOpacity>
         </View>
-        <FlatList
+        {groups.map((items, x) => {
+          return <StockGroupCard key={x}
+            ticker={items.groupName}
+            // pctchange=""
+            onPress={() => {
+              props.navigation.navigate("StockChat", {
+                itemName: "$NET",
+                itemPic: "https://i.stack.imgur.com/l60Hf.png"
+              });
+            }}
+            msg="Last message appear here..."
+          ></StockGroupCard>
+        })}
+        {Chatheads.map((items, x) => {
+          return <StockGroupCard key={x}
+            ticker={items.name}
+            // pctchange=""
+            onPress={() => {
+              props.navigation.navigate("ChatRoom", {
+                name: items.name,
+                uid: items.uid
+              });
+            }}
+            msg="Last message appear here..."
+          ></StockGroupCard>
+        })}
+        {/* <FlatList
           data={groups}
           keyExtractor={(item, index) => "key" + index}
           renderItem={({ item }) => {
+            console.log("FLAAAAAAAAAATIST ==>", item)
+
             return (
               <TouchableOpacity
                 onPress={() => {
@@ -148,7 +201,8 @@ const Chat = props => {
               </TouchableOpacity>
             );
           }}
-        ></FlatList>
+        ></FlatList> */}
+
       </ScrollView>
     </View>
     // </View>

@@ -20,12 +20,14 @@ const DismissKeyboard = ({ children }) => (
   </TouchableWithoutFeedback>
 );
 
-export default function App({ ...props }) {
+export default function App({ route, navigation }) {
+
+  const { username, phoneNo } = route.params;
   return (
     <View style={styles.getStarted}>
       <TouchableOpacity
         style={{ position: "absolute", top: 50, left: 20 }}
-        onPress={() => props.navigation.goBack()}
+        onPress={() => navigation.goBack()}
       >
         <AntDesign style={styles.back} name="left" size={30} color="black" />
       </TouchableOpacity>
@@ -57,7 +59,7 @@ export default function App({ ...props }) {
         >
           <TouchableOpacity
             style={styles.Button}
-            onPress={() => props.navigation.push("Notification")}
+            onPress={() => navigation.navigate("SignUp", { username: username, phoneNo: phoneNo })}
           >
             <Text
               style={{
@@ -73,7 +75,7 @@ export default function App({ ...props }) {
 
           <View>
             <TouchableOpacity
-              onPress={() => props.navigation.push("Notification")}
+              onPress={() => navigation.navigate("SignUp", { username: username, phoneNo: phoneNo })}
             >
               <Text style={styles.username}>Skip</Text>
             </TouchableOpacity>

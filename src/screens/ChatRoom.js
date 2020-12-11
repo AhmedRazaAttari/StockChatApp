@@ -15,97 +15,49 @@ export default function ChatRoom({ route, navigation }) {
 
     // const [messages, updateMsgs] = useState({});
 
-    const [messages, setMessages] = useState([{}])
+    // const [messages, setMessages] = useState([{}])
+
+    const [messages, setMessages] = useState([])
+
+    const [isloading, setLoading] = useState(true)
 
     const { name, uid } = route.params;
-    console.log("RRRRRRRRRRROUTE  PARRAMs", uid)
+    // console.log("RRRRRRRRRRROUTE  PARRAMs", uid)
+
 
     useEffect(() => {
         var UserId = fire.auth().currentUser.uid;
-        // console.log("PARAMS ====>", this.props.navigation.state.params.uid)
-        // var uid = uid;
-        // var _ = this;
 
-        firestore.collection("users").doc(UserId).collection("ChatHeads").doc(uid).collection("ChatMsgs").get().then(function (snapshot) {
-            // console.log("snapshot", snapshot)
+        const unsubscribeListener = firestore
+            .collection('users')
+            .doc(UserId)
+            .collection('ChatHeads')
+            .doc(uid)
+            .collection("ChatMsgs")
+            .orderBy('createdAt', 'desc')
+            .onSnapshot(querySnapshot => {
+                const messages = querySnapshot.docs.map(doc => {
+                    const firebaseData = doc.data()
 
-            snapshot.forEach(function (childSnapshot) {
-                console.log("snapshot", childSnapshot.data())
+                    const data = {
+                        _id: doc.id,
+                        text: '',
+                        createdAt: new Date().getTime(),
+                        ...firebaseData
+                    }
 
-                // setMessages(previousState => ({
-                //     messages: GiftedChat.append(previousState.messages, childSnapshot.data()),
-                // }))
-                // setMessages(prevMessages => [prevMessages, childSnapshot._data])
-                // ((newMessage = []) => {
-                //     setMessages(GiftedChat.append(messages, newMessage));
-                // })
-                // setMessages(prevMessages => [prevMessages, childSnapshot.data()])
+                    return data
+                })
 
-                setMessages(prevMessages => GiftedChat.append(prevMessages, childSnapshot.data()));
+                setMessages(messages)
             })
-        })
-    })
 
-    // function onSend(messages = []) {
+        return () => unsubscribeListener()
+    }, [])
 
-    // var UserId = fire.auth().currentUser.uid;
-    // // var uid = uid;
-    // // var name = name;
-
-    // // console.log(uid)
-    // // console.log(name)
-
-    // firestore.collection("users").doc(UserId).collection("ChatHeads").doc(uid).set({
-    //     name: name,
-    //     uid: uid,
-    // })
-
-    // firestore.collection("users").doc(uid).collection("ChatHeads").doc(UserId).set({
-    //     name: fire.auth().currentUser.displayName,
-    //     uid: UserId,
-    // })
-
-
-    // var ref = firestore.collection("users").doc();
-    // var newPostKey = ref.id
-    // for (var i = 0; i < messages.length; i++) {
-
-    //     var text = messages[i].text;
-    //     firestore.collection("users").doc(UserId).collection("ChatHeads").doc(uid).collection("ChatMsgs").doc(newPostKey).set({
-    //         _id: messages[i]._id,
-    //         createdAt: messages[i].createdAt.toUTCString(),
-    //         text: messages[i].text,
-    //         user: {
-    //             _id: 1,
-    //         }
-    //     })
-
-    //     firestore.collection("users").doc(uid).collection("ChatHeads").doc(UserId).collection("ChatMsgs").doc(newPostKey).set({
-    //         _id: messages[i]._id,
-    //         createdAt: messages[i].createdAt.toUTCString(),
-    //         text: messages[i].text,
-    //         user: {
-    //             _id: 2,
-    //             // avatar: firebase.auth().currentUser.photoURL,
-    //             name: fire.auth().currentUser.displayName
-    //         }
-    //     })
-
-    //     }
-
-    //     updateMsgs(previousState => ({
-    //         messages: GiftedChat.append(previousState.messages, messages),
-    //     }))
-    // }
-
-    const onSend = useCallback((newMessages) => {
+    function onSend(newMessage = []) {
 
         var UserId = fire.auth().currentUser.uid;
-        // var uid = uid;
-        // var name = name;
-
-        // console.log(uid)
-        // console.log(name)
 
         firestore.collection("users").doc(UserId).collection("ChatHeads").doc(uid).set({
             name: name,
@@ -120,22 +72,21 @@ export default function ChatRoom({ route, navigation }) {
 
         var ref = firestore.collection("users").doc();
         var newPostKey = ref.id
-        for (var i = 0; i < newMessages.length; i++) {
+        for (var i = 0; i < newMessage.length; i++) {
 
-            var text = newMessages[i].text;
             firestore.collection("users").doc(UserId).collection("ChatHeads").doc(uid).collection("ChatMsgs").doc(newPostKey).set({
-                _id: newMessages[i]._id,
-                createdAt: newMessages[i].createdAt.toUTCString(),
-                text: newMessages[i].text,
+                _id: newMessage[i]._id,
+                createdAt: newMessage[i].createdAt.toUTCString(),
+                text: newMessage[i].text,
                 user: {
                     _id: 1,
                 }
             })
 
             firestore.collection("users").doc(uid).collection("ChatHeads").doc(UserId).collection("ChatMsgs").doc(newPostKey).set({
-                _id: newMessages[i]._id,
-                createdAt: newMessages[i].createdAt.toUTCString(),
-                text: newMessages[i].text,
+                _id: newMessage[i]._id,
+                createdAt: newMessage[i].createdAt.toUTCString(),
+                text: newMessage[i].text,
                 user: {
                     _id: 2,
                     // avatar: firebase.auth().currentUser.photoURL,
@@ -144,9 +95,9 @@ export default function ChatRoom({ route, navigation }) {
             })
 
         }
-
-        setMessages(prevMessages => [...newMessages, ...prevMessages])
-    }, [])
+        setMessages(GiftedChat.append(messages, newMessage))
+        // setMessages(prevMessages => [...newMessages, ...prevMessages])
+    }
 
     function CustomView() {
         return <View style={{ flexDirection: "row", justifyContent: "space-around", alignItems: "center" }}>
@@ -159,7 +110,7 @@ export default function ChatRoom({ route, navigation }) {
             <TouchableOpacity onPress={this._showModal}>
                 <EvilIcons name="location" size={29} color="#3e7af0" />
             </TouchableOpacity>
-            <TouchableOpacity onPressIn={() => this.setState({ IsRecording: true })} onPressOut={() => this.setState({ IsRecording: false })}>
+            <TouchableOpacity >
                 <FontAwesome name="microphone" size={24} color="#3e7af0" />
             </TouchableOpacity>
             <TouchableOpacity>
@@ -170,12 +121,13 @@ export default function ChatRoom({ route, navigation }) {
             </TouchableOpacity>
         </View>
     }
+
     return (
         <View style={{ flex: 1 }}>
             <KeyboardAvoidingView style={styles.container} >
                 <GiftedChat
                     isAnimated={true}
-                    // renderAccessory={CustomView}
+                    renderAccessory={CustomView}
                     // renderSend={this.SendBtn}
                     messages={messages}
                     onSend={newMessages => onSend(newMessages)}
@@ -183,7 +135,6 @@ export default function ChatRoom({ route, navigation }) {
                         _id: 1,
                     }}
                 />
-                {/* {this.state.isModalVisible && this.renderModal()} */}
             </KeyboardAvoidingView>
         </View>
     )
