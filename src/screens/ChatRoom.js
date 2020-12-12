@@ -212,6 +212,15 @@ export default function ChatRoom({ route, navigation }) {
 
     return (
         <View style={{ flex: 1 }}>
+            <View style={{ height: 85, width: "100%", backgroundColor: "white" }}>
+                <TouchableOpacity
+                    style={{ position: "absolute", top: 50, left: 20 }}
+                    onPress={() => navigation.navigate("Chat")}
+                >
+                    <AntDesign name="left" size={30} color="black" />
+                </TouchableOpacity>
+
+            </View>
             <KeyboardAvoidingView style={styles.container} >
                 <GiftedChat
                     isAnimated={true}

@@ -52,22 +52,38 @@ const Chat = props => {
       });
     });
 
-    var DBref = db.collection("users").doc(UserId);
-    DBref.collection("ChatHeads").get().then(function (snapshot) {
+    db.collection("users").doc(UserId).collection("ChatHeads").onSnapshot(function (snapshot) {
+      snapshot.docChanges().forEach(function (anotherSnapshot) {
+        console.log("anotherSnapshot.doc.data()", anotherSnapshot.doc.data())
 
-      snapshot.forEach((anotherSnapshot) => {
-        console.log("SNAPSHOT OF USER Chata ==>", anotherSnapshot.data())
-        // ChatHeadsArr.push(anotherSnapshot.data())
-        for (var i = 0; i < snapshot.data.length; i++) {
+        // ChatHeadsArr.push(anotherSnapshot.doc.data())
+        for (var i = 0; i < anotherSnapshot.doc.data.length; i++) {
           ChatHeadsArr.push({
-            name: anotherSnapshot.data().name,
-            uid: anotherSnapshot.data().uid,
+            name: anotherSnapshot.doc.data().name,
+            uid: anotherSnapshot.doc.data().uid,
           })
         }
-        setChatheads(ChatHeadsArr)
-      })
 
+        setChatheads(ChatHeadsArr)
+
+      })
     })
+    // var DBref = db.collection("users").doc(UserId);
+    // DBref.collection("ChatHeads").get().then(function (snapshot) {
+
+    //   snapshot.forEach((anotherSnapshot) => {
+    //     console.log("SNAPSHOT OF USER Chata ==>", anotherSnapshot.data())
+    //     // ChatHeadsArr.push(anotherSnapshot.data())
+    // for (var i = 0; i < snapshot.data.length; i++) {
+    //   ChatHeadsArr.push({
+    //     name: anotherSnapshot.data().name,
+    //     uid: anotherSnapshot.data().uid,
+    //   })
+    // }
+    //     setChatheads(ChatHeadsArr)
+    //   })
+
+    // })
   }
   return (
     // <LinearGradient colors={["#AAB8C2", "#FFF"]} style={styles.gradient}>
@@ -190,18 +206,20 @@ const Chat = props => {
             );
           }}
         ></FlatList>
-        {/* <FlatList
+
+        <FlatList
           data={Chatheads}
           keyExtractor={(item, index) => "key" + index}
           renderItem={({ item }) => {
-            const name = item.name
+            console.log("FLAAAAAAAAAATIST ==>", item)
+            const name = item.name;
             return (
               <TouchableOpacity
                 onPress={() => {
                   props.navigation.navigate("ChatRoom", {
                     name: item.name,
                     uid: item.uid,
-                    title : item.name
+                    title: item.name
                   });
                 }}
               >
@@ -210,8 +228,8 @@ const Chat = props => {
               </TouchableOpacity>
             );
           }}
-        ></FlatList> */}
-        {Chatheads.map((items, x) => {
+        ></FlatList>
+        {/* {Chatheads.map((items, x) => {
           const name = items.name
           return <TouchableOpacity
             key={x}
@@ -226,18 +244,8 @@ const Chat = props => {
             <Messages item={name}></Messages>
             <View style={styles.seperator}></View>
           </TouchableOpacity>
-          // return <StockGroupCard key={x}
-          //   ticker={items.name}
-          //   // pctchange=""
-          //   onPress={() => {
-          //     props.navigation.navigate("ChatRoom", {
-          //       name: items.name,
-          //       uid: items.uid
-          //     });
-          //   }}
-          //   msg="Last message appear here..."
-          // ></StockGroupCard>
-        })}
+
+        })} */}
       </ScrollView>
     </View>
     // </View>
