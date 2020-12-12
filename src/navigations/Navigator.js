@@ -11,6 +11,7 @@ import Chat from "../screens/Chat";
 import Icon from "@expo/vector-icons/Ionicons";
 import Icon2 from "@expo/vector-icons/Entypo";
 import AddGroup from "../screens/Sub/AddGroup";
+import AddGroupMember from '../screens/Sub/AddGroup_Members';
 
 import GetStarted from "../screens/OnBoarding/GetStarted";
 import ChoosingUsername from "../screens/OnBoarding/ChoosingUsername";
@@ -145,6 +146,7 @@ const ChatStackNavigator = () => {
       <Stack.Screen name="Chat" component={BottomTabNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="CreateChat" component={CreateMsg} />
       <Stack.Screen name="ChatRoom" component={ChatRoom} options={{ headerShown: false }}/>
+      <Stack.Screen name="AddMember" component={AddGroupMember}  options={{title : "Add Receipents"}}/>
       <Stack.Screen name="Discussion" component={Discussion} />
       <Stack.Screen name="AddGroup" component={AddGroup} />
       <Stack.Screen name="StockChat" component={StockChat} />

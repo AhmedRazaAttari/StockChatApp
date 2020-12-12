@@ -15,7 +15,7 @@ import {
   Alert
 } from "react-native";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
-import firebase, { firestore } from "../../database/firebase";
+import fire, { firestore } from "../../database/firebase";
 import { Input } from "react-native-elements";
 
 import { LinearGradient } from "expo-linear-gradient";
@@ -74,7 +74,7 @@ export default function AddGroup(props) {
 
   function createGroup() {
     if(groupName !== undefined && groupName !== ""){
-      
+        props.navigation.push("AddMember", {groupName : groupName})
     }
     else{
       Alert.alert("Please Enter Group name!!!!")
