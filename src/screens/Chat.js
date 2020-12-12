@@ -57,13 +57,13 @@ const Chat = props => {
 
       snapshot.forEach((anotherSnapshot) => {
         console.log("SNAPSHOT OF USER Chata ==>", anotherSnapshot.data())
-        ChatHeadsArr.push(anotherSnapshot.data())
-        // for (var i = 0; i < snapshot.data.length; i++) {
-        //   ChatHeadsArr.push({
-        //     name: anotherSnapshot.data().name,
-        //     uid: anotherSnapshot.data().uid,
-        //   })
-        // }
+        // ChatHeadsArr.push(anotherSnapshot.data())
+        for (var i = 0; i < snapshot.data.length; i++) {
+          ChatHeadsArr.push({
+            name: anotherSnapshot.data().name,
+            uid: anotherSnapshot.data().uid,
+          })
+        }
         setChatheads(ChatHeadsArr)
       })
 
@@ -168,20 +168,8 @@ const Chat = props => {
             }}
             msg="Last message appear here..."
           ></StockGroupCard>
-        })}
-        {Chatheads.map((items, x) => {
-          return <StockGroupCard key={x}
-            ticker={items.name}
-            // pctchange=""
-            onPress={() => {
-              props.navigation.navigate("ChatRoom", {
-                name: items.name,
-                uid: items.uid
-              });
-            }}
-            msg="Last message appear here..."
-          ></StockGroupCard>
         })} */}
+
         <FlatList
           data={groups}
           keyExtractor={(item, index) => "key" + index}
@@ -202,7 +190,7 @@ const Chat = props => {
             );
           }}
         ></FlatList>
-        <FlatList
+        {/* <FlatList
           data={Chatheads}
           keyExtractor={(item, index) => "key" + index}
           renderItem={({ item }) => {
@@ -222,8 +210,34 @@ const Chat = props => {
               </TouchableOpacity>
             );
           }}
-        ></FlatList>
-
+        ></FlatList> */}
+        {Chatheads.map((items, x) => {
+          const name = items.name
+          return <TouchableOpacity
+            key={x}
+            onPress={() => {
+              props.navigation.navigate("ChatRoom", {
+                name: items.name,
+                uid: items.uid,
+                title: items.name
+              });
+            }}
+          >
+            <Messages item={name}></Messages>
+            <View style={styles.seperator}></View>
+          </TouchableOpacity>
+          // return <StockGroupCard key={x}
+          //   ticker={items.name}
+          //   // pctchange=""
+          //   onPress={() => {
+          //     props.navigation.navigate("ChatRoom", {
+          //       name: items.name,
+          //       uid: items.uid
+          //     });
+          //   }}
+          //   msg="Last message appear here..."
+          // ></StockGroupCard>
+        })}
       </ScrollView>
     </View>
     // </View>

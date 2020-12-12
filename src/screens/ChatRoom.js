@@ -99,12 +99,12 @@ export default function ChatRoom({ route, navigation }) {
                             if (message[i].image) {
                                 console.log("true")
 
-                                firestore.collection("users").doc(UserId).collection("ChatHeads").doc(uid).update({
+                                firestore.collection("users").doc(UserId).collection("ChatHeads").doc(uid).set({
                                     name: name,
                                     uid: uid,
                                 })
 
-                                firestore.collection("users").doc(uid).collection("ChatHeads").doc(UserId).update({
+                                firestore.collection("users").doc(uid).collection("ChatHeads").doc(UserId).set({
                                     name: fire.auth().currentUser.displayName,
                                     uid: UserId,
                                 })
