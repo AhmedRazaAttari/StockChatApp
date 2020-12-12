@@ -57,13 +57,13 @@ const Chat = props => {
 
       snapshot.forEach((anotherSnapshot) => {
         console.log("SNAPSHOT OF USER Chata ==>", anotherSnapshot.data())
-        // ChatHeadsArr.push(anotherSnapshot.data())
-        for (var i = 0; i < snapshot.data.length; i++) {
-          ChatHeadsArr.push({
-            name: anotherSnapshot.data().name,
-            uid: anotherSnapshot.data().uid,
-          })
-        }
+        ChatHeadsArr.push(anotherSnapshot.data())
+        // for (var i = 0; i < snapshot.data.length; i++) {
+        //   ChatHeadsArr.push({
+        //     name: anotherSnapshot.data().name,
+        //     uid: anotherSnapshot.data().uid,
+        //   })
+        // }
         setChatheads(ChatHeadsArr)
       })
 
@@ -206,7 +206,7 @@ const Chat = props => {
           data={Chatheads}
           keyExtractor={(item, index) => "key" + index}
           renderItem={({ item }) => {
-
+            const name = item.name
             return (
               <TouchableOpacity
                 onPress={() => {
@@ -217,7 +217,7 @@ const Chat = props => {
                   });
                 }}
               >
-                <Messages item={item.name}></Messages>
+                <Messages item={name}></Messages>
                 <View style={styles.seperator}></View>
               </TouchableOpacity>
             );

@@ -27,59 +27,63 @@ export default function AddGroup(props) {
   const [errorState, setErrorState] = useState("");
   const [isLoading, setisLoading] = useState(false);
 
-  function createGroupToFirebaseGroup() {
-    setisLoading(true);
-    const groupRef = firestore.collection("groups").doc();
-    const userID = firebase.auth().currentUser.uid;
+  // function createGroupToFirebaseGroup() {
+  //   setisLoading(true);
+  //   const groupRef = firestore.collection("groups").doc();
+  //   const userID = firebase.auth().currentUser.uid;
 
-    groupRef
-      .set({
-        groupID: groupRef.id,
-        groupName: groupName,
-        userID: userID
-      })
-      .then(function(docRef) {
-        setisLoading(false);
-        console.log("Document Written with ID", groupRef.id);
-        addMemberOfChatInFirebase(groupRef.id, userID);
-      })
-      .catch(function(error) {
-        Alert.alert(error.message);
-        setisLoading(false);
-        console.log("error adding Doc", error);
-      });
+  //   groupRef
+  //     .set({
+  //       groupID: groupRef.id,
+  //       groupName: groupName,
+  //       userID: userID
+  //     })
+  //     .then(function (docRef) {
+  //       setisLoading(false);
+  //       console.log("Document Written with ID", groupRef.id);
+  //       addMemberOfChatInFirebase(groupRef.id, userID);
+  //     })
+  //     .catch(function (error) {
+  //       Alert.alert(error.message);
+  //       setisLoading(false);
+  //       console.log("error adding Doc", error);
+  //     });
+  // }
+  // function addMemberOfChatInFirebase(groupID, userID) {
+  //   const memberRefs = firestore
+  //     .collection("members")
+  //     .doc(groupID)
+  //     .collection("member")
+  //     .doc();
+  //   memberRefs
+  //     .set({
+  //       userID: userID
+  //     })
+  //     .then(function (docRef) {
+  //       props.navigation.goBack();
+  //     })
+  //     .catch(function (error) {
+  //       setisLoading(false);
+  //       console.error("Error adding Document", error);
+  //     });
+  // }
+
+  // function performCreateGroup = () => {
+  //   createGroupToFirebaseGroup();
+  // };
+
+  function createGroup() {
+    if(groupName !== undefined && groupName !== ""){
+      
+    }
+    else{
+      Alert.alert("Please Enter Group name!!!!")
+    }
   }
-  function addMemberOfChatInFirebase(groupID, userID) {
-    const memberRefs = firestore
-      .collection("members")
-      .doc(groupID)
-      .collection("member")
-      .doc();
-    memberRefs
-      .set({
-        userID: userID
-      })
-      .then(function(docRef) {
-        props.navigation.goBack();
-      })
-      .catch(function(error) {
-        setisLoading(false);
-        console.error("Error adding Document", error);
-      });
-  }
-  performCreateGroup = () => {
-    createGroupToFirebaseGroup();
-  };
 
   return (
     <View style={styles.getStarted}>
-      <TouchableOpacity
-        style={{ position: "absolute", top: 50, left: 20 }}
-        onPress={() => props.navigation.goBack()}
-      >
-        <AntDesign style={styles.back} name="left" size={30} color="black" />
-      </TouchableOpacity>
-      <View style={{ display: "flex", alignSelf: "center", marginTop: 100 }}>
+      <View style={{ display: "flex", alignSelf: "center" }}>
         <Image
           source={require("../../../assets/icondark.png")}
           style={{ width: 80, height: 80 }}
@@ -88,32 +92,22 @@ export default function AddGroup(props) {
       <View>
         <Text style={styles.Stockchat}> START BY CREATING A GROUP</Text>
       </View>
-      <View>
+      {/* <View>
         <Text style={styles.username}>
           Your group will publicly available in the Stock Chat community.
         </Text>
-      </View>
+      </View> */}
 
       <KeyboardAvoidingView behavior="padding" enabled style={{ flex: 1 }}>
         <View style={{ paddingTop: 50, paddingHorizontal: 10 }}>
           <Input
-            //einputContainerStyle={{ borderBottomWidth: 0 }}
             style={styles.Input}
             placeholderTextColor="lightgrey"
             placeholder="Enter Group Name"
             value={groupName}
-            // onValidateTextField = {validateField}
-
             onChangeText={val => setGroupName(val)}
           />
-          {/* <TextInput
-              style={styles.inputStyle}
-              placeholder="Enter Group Name"
-              value={groupName}
-              // onValidateTextField = {validateField}
 
-              onChangeText={val => setGroupName(val)}
-            /> */}
         </View>
 
         <View
@@ -124,21 +118,9 @@ export default function AddGroup(props) {
             alignItems: "center"
           }}
         >
-          {/* <TouchableOpacity
-              onPress={performCreateGroup}
-              isLoading={isLoading}
-            >
-              <View style={styles.btn}>
-                <Text
-                  style={{ color: "white", fontSize: 19, fontWeight: "bold" }}
-                >
-                  Create Group
-                </Text>
-              </View>
-            </TouchableOpacity> */}
           <TouchableOpacity
             style={styles.Button}
-            onPress={performCreateGroup}
+            onPress={() => createGroup()}
             isLoading={isLoading}
           >
             <Text
