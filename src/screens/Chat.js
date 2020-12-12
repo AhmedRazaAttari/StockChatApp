@@ -211,8 +211,8 @@ const Chat = props => {
               <TouchableOpacity
                 onPress={() => {
                   props.navigation.navigate("ChatRoom", {
-                    name: items.name,
-                    uid: items.uid,
+                    name: item.name,
+                    uid: item.uid,
                     title : item.name
                   });
                 }}
