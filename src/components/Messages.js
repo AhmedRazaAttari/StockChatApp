@@ -32,8 +32,8 @@ const Messages = ({ item }) => {
 
       {/* <Image source={ Images.groups } style={styles.image} /> */}
       <View style={{ marginLeft: 10 }}>
-        <Text style={styles.username}>#{item.groupName}</Text>
-        <Text style={styles.text}>{item.groupMembers}</Text>
+        <Text style={styles.username}>#{item}</Text>
+        {/* <Text style={styles.text}>{item.groupMembers}</Text> */}
       </View>
       <View>
         <Text style={styles.duration}>{randomTime()}</Text>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 
-import { Text, StyleSheet, View, Image, TouchableOpacity, ScrollView, Alert, Button } from 'react-native';
+import { Text, StyleSheet, View, Image, TouchableOpacity, ScrollView, Alert, Button, FlatList } from 'react-native';
 import { Ionicons, Entypo, EvilIcons, FontAwesome, AntDesign, MaterialCommunityIcons, Feather } from '@expo/vector-icons';
 import fire, { firestore } from "../database/firebase";
 
@@ -9,25 +9,34 @@ var itm = [];
 export default function CreateMsg({ navigation }) {
 
     const [isloading, setloading] = useState(true);
+    const [AllUsers, SetUsers] = useState([])
+
     useEffect(() => {
-        var items = []
-        firestore.collection("users").get().then((snapshot) => {
-            snapshot.forEach((anotherSnapshot) => {
-
-                items.push({
-                    id: anotherSnapshot.data().id,
-                    Name: anotherSnapshot.data().Name,
-                    email: anotherSnapshot.data().email
-                })
-            })
-        }).then(() => {
-            itm = items
-            console.log("ITM ====>", itm)
-            setloading(false)
-        })
-
+        isloading && fetchedUsers()
     })
 
+    function fetchedUsers() {
+
+        var items = []
+
+        firestore.collection("users").get().then((snapshot) => {
+            snapshot.forEach((anotherSnapshot) => {
+                if (anotherSnapshot.data().id === fire.auth().currentUser.uid) {
+                    console.log("Current user profile")
+                }
+                else {
+                    items.push({
+                        id: anotherSnapshot.data().id,
+                        Name: anotherSnapshot.data().Name,
+                        email: anotherSnapshot.data().email
+                    })
+                }
+            })
+        }).then(() => {
+            SetUsers(items)
+            setloading(false)
+        })
+    }
     // function MapFunc() {
     //     itm.map((data, index) => {
     //         console.log("USERDATA ===>", data)
@@ -59,15 +68,41 @@ export default function CreateMsg({ navigation }) {
                         <Feather name="search" size={30} color="black" />
                     </TouchableOpacity>
                 </View>
-                {itm.map((data, index) => {
+                <FlatList
+                    data={AllUsers}
+                    keyExtractor={(item, index) => "key" + index}
+                    renderItem={({ item }) => {
+                        console.log("FLAAAAAAAAAATIST ==>", item)
+                        return (
+                            <TouchableOpacity
+                                onPress={() => {
+                                    navigation.navigate("ChatRoom", {
+                                        name: item.Name,
+                                        uid: item.id,
+                                        title: item.Name
+                                    })
+                                }}
+                            >
+                                <View style={{ flexDirection: "column" }} >
+                                    <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "flex-start", height: 60, marginBottom: 10 }}>
+                                        <Image style={{ borderRadius: 100, backgroundColor: 'black', width: 50, height: 50, alignItems: "center", justifyContent: "center", borderWidth: 2, borderColor: "white" }} />
+                                        <Text>&nbsp;&nbsp;&nbsp;&nbsp;</Text>
+                                        <Text style={{ fontSize: 18, fontWeight: "bold" }}>{item.Name}</Text>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                        );
+                    }}
+                ></FlatList>
+                {/* {itm.map((data, index) => {
                     console.log("USERDATA ===>", data)
                     if (data.id === fire.auth().currentUser.uid) {
                         console.log("Current user profile")
                     }
                     else {
-                    console.log("IIIIIIIIITMMMMMMMMMMMMMMM  in else ===>", itm)
+                        console.log("IIIIIIIIITMMMMMMMMMMMMMMM  in else ===>", itm)
 
-                        return <TouchableOpacity onPress={() => { console.log(data.id, data.Name); navigation.navigate("ChatRoom", { name: data.Name, uid: data.id }) }} key={index}>
+                        return <TouchableOpacity onPress={() => { console.log(data.id, data.Name); navigation.navigate("ChatRoom", { name: data.Name, uid: data.id, title: data.Name }) }} key={index}>
                             <View style={{ flexDirection: "column" }} >
                                 <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "flex-start", height: 60, marginBottom: 10 }}>
                                     <Image style={{ borderRadius: 100, backgroundColor: 'black', width: 50, height: 50, alignItems: "center", justifyContent: "center", borderWidth: 2, borderColor: "white" }} />
@@ -77,7 +112,7 @@ export default function CreateMsg({ navigation }) {
                             </View>
                         </TouchableOpacity>
                     }
-                })}
+                })} */}
             </View>
         </ScrollView>
     )

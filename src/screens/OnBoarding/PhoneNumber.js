@@ -30,7 +30,7 @@ export default function App({ route, navigation }) {
     <View style={styles.getStarted}>
       <TouchableOpacity
         style={{ position: "absolute", top: 50, left: 20 }}
-        onPress={() => props.navigation.goBack()}
+        onPress={() => navigation.goBack()}
       >
         <AntDesign style={styles.back} name="left" size={30} color="black" />
       </TouchableOpacity>

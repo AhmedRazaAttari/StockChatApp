@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -15,7 +15,7 @@ export default function App({ ...props }) {
 
   const [isUser, SetUser] = useState(false);
 
-  
+
   return (
     <View style={styles.getStarted}>
       <View>
@@ -58,6 +58,14 @@ export default function App({ ...props }) {
           </Text>
         </TouchableOpacity>
 
+        <View style={{marginTop : 20}}>
+          <Text
+            style={styles.loginText}
+            onPress={() => props.navigation.push("Login")}
+          >
+            Already Registered? Sign In
+        </Text>
+        </View>
         {/* <View>
           <TouchableOpacity onPress={() => props.navigation.push("Login")}>
             <Text style={styles.HaveAccount}>
@@ -108,5 +116,8 @@ const styles = StyleSheet.create({
     top: 35,
     fontSize: 20,
     marginHorizontal: 40
+  },
+  loginText : {
+    fontSize : 18
   }
 });

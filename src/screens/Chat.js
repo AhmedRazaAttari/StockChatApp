@@ -156,7 +156,7 @@ const Chat = props => {
             <AntDesign name="pluscircleo" size={24} color="black" />
           </TouchableOpacity>
         </View>
-        {groups.map((items, x) => {
+        {/* {groups.map((items, x) => {
           return <StockGroupCard key={x}
             ticker={items.groupName}
             // pctchange=""
@@ -181,13 +181,13 @@ const Chat = props => {
             }}
             msg="Last message appear here..."
           ></StockGroupCard>
-        })}
-        {/* <FlatList
+        })} */}
+        <FlatList
           data={groups}
           keyExtractor={(item, index) => "key" + index}
           renderItem={({ item }) => {
             console.log("FLAAAAAAAAAATIST ==>", item)
-
+            const name = item.groupName;
             return (
               <TouchableOpacity
                 onPress={() => {
@@ -196,12 +196,33 @@ const Chat = props => {
                   });
                 }}
               >
-                <Messages item={item}></Messages>
+                <Messages item={name}></Messages>
                 <View style={styles.seperator}></View>
               </TouchableOpacity>
             );
           }}
-        ></FlatList> */}
+        ></FlatList>
+        <FlatList
+          data={Chatheads}
+          keyExtractor={(item, index) => "key" + index}
+          renderItem={({ item }) => {
+
+            return (
+              <TouchableOpacity
+                onPress={() => {
+                  props.navigation.navigate("ChatRoom", {
+                    name: items.name,
+                    uid: items.uid,
+                    title : item.name
+                  });
+                }}
+              >
+                <Messages item={item.name}></Messages>
+                <View style={styles.seperator}></View>
+              </TouchableOpacity>
+            );
+          }}
+        ></FlatList>
 
       </ScrollView>
     </View>

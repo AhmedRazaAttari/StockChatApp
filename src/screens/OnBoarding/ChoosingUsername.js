@@ -64,6 +64,7 @@ export default function App({ route, navigation }) {
       // }
     }
     else {
+      Alert.alert("Please enter user name")
     }
   }
 

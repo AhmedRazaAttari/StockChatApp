@@ -79,7 +79,7 @@ export default function Login({ navigation }) {
 
           <Text
             style={styles.loginText}
-            onPress={() => navigation.navigate("SignUp")}
+            onPress={() => navigation.navigate("ChoosingUsername")}
           >
             Don't have an account? Sign Up
         </Text>
