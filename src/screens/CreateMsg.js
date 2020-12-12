@@ -37,26 +37,6 @@ export default function CreateMsg({ navigation }) {
             setloading(false)
         })
     }
-    // function MapFunc() {
-    //     itm.map((data, index) => {
-    //         console.log("USERDATA ===>", data)
-    //         if (data.id === fire.auth().currentUser.uid) {
-    //             console.log("Current user profile")
-    //         }
-    //         else {
-    //             return <TouchableOpacity onPress={() => { console.log(data.id, data.Name); this.props.navigation.navigate("ChatRoom", { name: data.Name, uid: data.id }) }} key={index}>
-    //                 <View style={{ flexDirection: "column" }} >
-    //                     <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "flex-start", height: 60, marginBottom: 10 }}>
-    //                         <Image style={{ borderRadius: 100, backgroundColor: 'black', width: 50, height: 50, alignItems: "center", justifyContent: "center", borderWidth: 2, borderColor: "white" }} />
-    //                         <Text>&nbsp;&nbsp;&nbsp;&nbsp;</Text>
-    //                         <Text style={{ fontSize: 18, fontWeight: "bold" }}>{data.Name}</Text>
-    //                     </View>
-    //                 </View>
-    //             </TouchableOpacity>
-    //         }
-    //     })
-    // }
-
 
     return (
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -64,7 +44,7 @@ export default function CreateMsg({ navigation }) {
                 {/* <Text>{"\n"}</Text> */}
                 <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                     <Text style={{ fontSize: 22, marginBottom: 15, fontWeight: "bold" }}>Select Receipent</Text>
-                    <TouchableOpacity onPress={() => this.Logout()}>
+                    <TouchableOpacity>
                         <Feather name="search" size={30} color="black" />
                     </TouchableOpacity>
                 </View>
