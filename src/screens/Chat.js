@@ -35,18 +35,17 @@ const Chat = props => {
     const db = firestore;
     var groupArray = [];
     var ChatHeadsArr = [];
-    db.collection("groups").onSnapshot(function (snapshot) {
+
+    db.collection("users").doc(UserId).collection("Groups").onSnapshot(function (snapshot) {
       snapshot.docChanges().forEach(function (change) {
-        if (change.type == "added") {
-          console.log("New Group: ", change.doc.data());
-          groupArray.push(change.doc.data());
-        }
-        if (change.type === "modified") {
-          console.log("Modified Group: ", change.doc.data());
-        }
-        if (change.type === "removed") {
-          console.log("Removed Group", change.doc.data());
-        }
+        console.log("New Group: ", change.doc.data());
+        // for (var i = 0; i < change.doc.data.length; i++) {
+        //   groupArray.push({
+        //     GroupName: change.doc.data().GroupName[i]
+        //   })
+        // }
+
+        groupArray.push(change.doc.data());
 
         setGroups(groupArray);
       });
@@ -191,12 +190,12 @@ const Chat = props => {
           keyExtractor={(item, index) => "key" + index}
           renderItem={({ item }) => {
             console.log("FLAAAAAAAAAATIST ==>", item)
-            const name = item.groupName;
+            const name = item.GroupName;
             return (
               <TouchableOpacity
                 onPress={() => {
-                  props.navigation.navigate("Discussion", {
-                    item
+                  props.navigation.navigate("GroupChat", {
+                    groupName: name
                   });
                 }}
               >

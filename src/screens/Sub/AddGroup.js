@@ -73,10 +73,18 @@ export default function AddGroup(props) {
   // };
 
   function createGroup() {
-    if(groupName !== undefined && groupName !== ""){
-        props.navigation.push("AddMember", {groupName : groupName})
+    if (groupName !== undefined && groupName !== "") {
+      var UserId = fire.auth().currentUser.uid;
+      firestore.collection("users").doc(UserId).collection("Groups").doc(groupName).get().then(function (snapshot) {
+        if (snapshot.exists) {
+          Alert.alert("Group Already exists with same name..")
+        }
+        else {
+          props.navigation.push("AddMember", { groupName: groupName })
+        }
+      })
     }
-    else{
+    else {
       Alert.alert("Please Enter Group name!!!!")
     }
   }
