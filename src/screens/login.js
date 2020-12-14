@@ -1,6 +1,6 @@
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   SafeAreaView,
@@ -14,6 +14,7 @@ import {
 } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import fire, { firestore } from "../database/firebase";
+import { useIsFocused } from "@react-navigation/native";
 
 
 export default function Login({ navigation }) {
@@ -21,6 +22,25 @@ export default function Login({ navigation }) {
   const [password, setPass] = useState();
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState();
+  const isVisible = useIsFocused();
+
+
+  useEffect(() => {
+    if (isVisible) {
+      AuthUser();
+    }
+  }, [isVisible]);
+
+  function AuthUser(){
+    fire.auth().onAuthStateChanged(function(user){
+      if(user){
+        navigation.navigate("Chat")
+      }
+      else{
+
+      }
+    })
+  }
 
   const userLogin = () => {
     if (email !== undefined && email !== "" && password !== undefined && password !== "") {

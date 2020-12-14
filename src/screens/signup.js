@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   SafeAreaView,
@@ -13,6 +13,8 @@ import {
 import fire, { firestore } from "../database/firebase";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { useIsFocused } from "@react-navigation/native";
+
 
 export default function Signup({ route, navigation }) {
   // const [displayName, setdisplay] = useState();
@@ -20,6 +22,24 @@ export default function Signup({ route, navigation }) {
   const [password, setPass] = useState();
   const [isLoading, setLoading] = useState(false);
   const {username, phoneNo} = route.params;
+  const isVisible = useIsFocused();
+
+  useEffect(() => {
+    if (isVisible) {
+      AuthUser();
+    }
+  }, [isVisible]);
+
+  function AuthUser(){
+    fire.auth().onAuthStateChanged(function(user){
+      if(user){
+        navigation.navigate("Chat")
+      }
+      else{
+
+      }
+    })
+  }
 
   const registerUser = () => {
     console.log(email)
