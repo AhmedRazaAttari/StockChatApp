@@ -20,50 +20,48 @@ export default function GroupChat({ route, navigation }) {
     const { groupName } = route.params;
 
     useEffect(() => {
+        isloading && Fetched()
+    })
 
-        // (async () => {
-        //     if (Platform.OS !== 'web') {
-        //         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        //         if (status !== 'granted') {
-        //             alert('Sorry, we need camera roll permissions to make this work!');
-        //         }
-        //     }
-        // })();
-
+    function Fetched() {
         var UserId = fire.auth().currentUser.uid;
+        var data = [];
+        firestore.collection("users").doc(UserId).collection("Groups").doc(groupName).collection("Participents").doc("IDsofParticipants").get().then(function (snapshot) {
+            console.log("PARTICIPENTS FROM GROUP CHAT", snapshot.data().PartcipentsList)
+            for (var i = 0; i < snapshot.data().PartcipentsList.length; i++) {
+                if (snapshot.data().PartcipentsList[i] === fire.auth().currentUser.uid) {
+                    console.log("CURRENT USER IN PARTICIPENTS", snapshot.data().PartcipentsList[i])
+                }
+                else {
+                    data.push(snapshot.data().PartcipentsList[i])
+                }
+            }
 
-        function Participents() {
-            firestore.collection("users").doc(UserId).collection("Groups").doc(groupName).collection("Participents").doc("IDsofParticipants").get().then(function (snapshot) {
-                console.log("PARTICIPENTS FROM GROUP CHAT", snapshot.data().PartcipentsList)
-                setParticipentsID(snapshot.data().PartcipentsList)
-            })
-        }
+        }).then(() => {
+            setParticipentsID(data)
+        })
 
-        const unsubscribeListener = firestore
-            .collection('users')
+        firestore.collection('users')
             .doc(UserId).collection("Groups").doc(groupName).collection("Messages")
             .onSnapshot(querySnapshot => {
                 const messages = querySnapshot.docs.map(doc => {
                     const firebaseData = doc.data()
-                    console.log("FIREBBBBBBASEDATTTTA", firebaseData)
+                    // console.log("FIREBBBBBBASEDATTTTA", firebaseData)
                     const data = {
                         _id: doc.id,
                         text: '',
                         createdAt: new Date().getTime(),
                         ...firebaseData
                     }
-                    console.log("DDDDDDDDDAAAAAAAAAAATTTTTTTTTTA", data)
+                    // console.log("DDDDDDDDDAAAAAAAAAAATTTTTTTTTTA", data)
                     return data
                 })
 
                 setMessages(messages)
+                setLoading(false)
             })
 
-        return () => {
-            unsubscribeListener()
-            Participents()
-        }
-    }, [])
+    }
 
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -116,15 +114,15 @@ export default function GroupChat({ route, navigation }) {
                                 })
 
 
-                                for (var i = 0; i < ParticipentsIDS.length; i++) {
-
-                                    firestore.collection("users").doc(ParticipentsIDS[i]).collection("Groups").doc(groupName).collection("Messages").doc(newPostKey).set({
+                                for (var x = 0; x < ParticipentsIDS.length; x++) {
+                                    console.log("PARTICIPENTS FROM ONSEND FUNC", ParticipentsIDS[x])
+                                    firestore.collection("users").doc(ParticipentsIDS[x]).collection("Groups").doc(groupName).collection("Messages").doc(newPostKey).set({
                                         _id: message[i]._id,
                                         createdAt: message[i].createdAt.toUTCString(),
                                         image: message[i].image,
                                         user: {
                                             _id: 2,
-                                            avatar: fire.auth().currentUser.photoURL,
+                                            // avatar: fire.auth().currentUser.photoURL,
                                         }
                                     })
                                 }
@@ -161,9 +159,10 @@ export default function GroupChat({ route, navigation }) {
             })
 
 
-            for (var i = 0; i < ParticipentsIDS.length; i++) {
+            for (var x = 0; x < ParticipentsIDS.length; x++) {
+                console.log("PARTICIPENTS FROM ONSEND FUNC", ParticipentsIDS[x])
 
-                firestore.collection("users").doc(ParticipentsIDS[i]).collection("Groups").doc(groupName).collection("Messages").doc(newPostKey).set({
+                firestore.collection("users").doc(ParticipentsIDS[x]).collection("Groups").doc(groupName).collection("Messages").doc(newPostKey).set({
                     _id: newMessage[i]._id,
                     createdAt: newMessage[i].createdAt.toUTCString(),
                     text: newMessage[i].text,
@@ -214,7 +213,7 @@ export default function GroupChat({ route, navigation }) {
                     <AntDesign name="left" size={30} color="black" style={{ marginTop: 20 }} />
                 </TouchableOpacity>
                 <Text style={{ fontSize: 22, fontWeight: "bold", marginTop: 20 }}>{groupName}</Text>
-                <Entypo name="info" size={24} color="black" style={{marginTop : 20}} onPress={() => navigation.navigate("GroupInfo", {groupName : groupName})}/>
+                <Entypo name="info" size={24} color="black" style={{ marginTop: 20 }} onPress={() => navigation.navigate("GroupInfo", { groupName: groupName })} />
             </View>
             {/* <View style={{ flexDirection: "row", height: 85, width: "100%", backgroundColor: "white" }}>
                 <TouchableOpacity

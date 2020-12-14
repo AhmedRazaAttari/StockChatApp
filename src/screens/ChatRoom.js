@@ -219,7 +219,7 @@ export default function ChatRoom({ route, navigation }) {
                 >
                     <AntDesign name="left" size={30} color="black" />
                 </TouchableOpacity>
-                <Text style={{marginLeft : 20}}>{name}</Text>
+                <Text style={{marginLeft : 20, fontSize : 20}}>{name}</Text>
             </View>
             <KeyboardAvoidingView style={styles.container} >
                 <GiftedChat

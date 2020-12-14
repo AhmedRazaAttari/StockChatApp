@@ -58,8 +58,13 @@ export default function AddMoreMember({ route, navigation }) {
             for (var i = 0; i < temp.length; i++) {
                 for (var x = 0; x < ParticipentsIDS.length; x++) {
                     if (temp[i].id === ParticipentsIDS[x]) {
-                        console.log("MAtched", temp[i])
-                        temp.splice(i, 1)
+                        if (temp[i].id === fire.auth().currentUser.uid) {
+
+                        }
+                        else {
+                            console.log("MAtched", temp[i])
+                            temp.splice(i, 1)
+                        }
                     }
                 }
                 console.log("TEMP ***", temp)
