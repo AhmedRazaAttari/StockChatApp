@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useIsFocused } from "@react-navigation/native";
 import {
   View,
   Text,
@@ -23,12 +24,16 @@ import fire, { firestore } from "../database/firebase";
 import StockGroupCard from "../components/StockGroupCard";
 
 const Chat = props => {
+
+  const isVisible = useIsFocused();
   const [groups, setGroups] = useState([]);
   const [Chatheads, setChatheads] = useState([]);
 
   useEffect(() => {
-    getChats();
-  }, []);
+    if (isVisible) {
+      getChats();
+    }
+  }, [isVisible]);
 
   function getChats() {
     var UserId = fire.auth().currentUser.uid;

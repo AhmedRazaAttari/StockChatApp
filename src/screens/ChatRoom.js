@@ -20,15 +20,6 @@ export default function ChatRoom({ route, navigation }) {
 
     useEffect(() => {
 
-        (async () => {
-            if (Platform.OS !== 'web') {
-                const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-                if (status !== 'granted') {
-                    alert('Sorry, we need camera roll permissions to make this work!');
-                }
-            }
-        })();
-
         var UserId = fire.auth().currentUser.uid;
 
         const unsubscribeListener = firestore
@@ -212,14 +203,14 @@ export default function ChatRoom({ route, navigation }) {
 
     return (
         <View style={{ flex: 1 }}>
-            <View style={{ flexDirection : "row", height: 85, width: "100%", backgroundColor: "white" }}>
+            <View style={{ flexDirection: "row", height: 80, width: "100%", backgroundColor: "white", alignItems: "center" }}>
                 <TouchableOpacity
-                    style={{ position: "absolute", top: 50, left: 20 }}
+                    // style={{ position: "absolute", top: 50, left: 20 }}
                     onPress={() => navigation.navigate("Chat")}
                 >
-                    <AntDesign name="left" size={30} color="black" />
+                    <AntDesign name="left" size={30} color="black" style={{ marginTop: 20, marginLeft : 20 }} />
                 </TouchableOpacity>
-                <Text style={{marginLeft : 20, fontSize : 20}}>{name}</Text>
+                <Text style={{ marginLeft: 20, fontSize: 20, marginTop : 20, fontWeight : "bold" }}>{name}</Text>
             </View>
             <KeyboardAvoidingView style={styles.container} >
                 <GiftedChat
